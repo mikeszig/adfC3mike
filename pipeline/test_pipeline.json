@@ -29,7 +29,10 @@
 				"userProperties": [],
 				"typeProperties": {
 					"variableName": "var2",
-					"value": ""
+					"value": {
+						"value": "@pipeline().parameters.param",
+						"type": "Expression"
+					}
 				}
 			}
 		],
