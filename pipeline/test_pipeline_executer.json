@@ -1,0 +1,11 @@
+{
+	"name": "test_pipeline_executer",
+	"properties": {
+		"variables": {
+			"var": {
+				"type": "String"
+			}
+		},
+		"annotations": []
+	}
+}

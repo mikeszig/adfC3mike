@@ -1,0 +1,11 @@
+{
+	"name": "test_pipeline_get_metadata",
+	"properties": {
+		"variables": {
+			"var": {
+				"type": "String"
+			}
+		},
+		"annotations": []
+	}
+}
