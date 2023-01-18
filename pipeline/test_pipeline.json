@@ -26,7 +26,11 @@
 						]
 					}
 				],
-				"userProperties": []
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "var2",
+					"value": ""
+				}
 			}
 		],
 		"parameters": {
@@ -36,6 +40,9 @@
 		},
 		"variables": {
 			"var": {
+				"type": "String"
+			},
+			"var2": {
 				"type": "String"
 			}
 		},
