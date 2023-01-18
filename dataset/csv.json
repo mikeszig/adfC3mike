@@ -1,0 +1,148 @@
+{
+	"name": "csv",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "azure_blob_storage",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "Summary of Weather.csv",
+				"container": "input"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "STA",
+				"type": "String"
+			},
+			{
+				"name": "Date",
+				"type": "String"
+			},
+			{
+				"name": "Precip",
+				"type": "String"
+			},
+			{
+				"name": "WindGustSpd",
+				"type": "String"
+			},
+			{
+				"name": "MaxTemp",
+				"type": "String"
+			},
+			{
+				"name": "MinTemp",
+				"type": "String"
+			},
+			{
+				"name": "MeanTemp",
+				"type": "String"
+			},
+			{
+				"name": "Snowfall",
+				"type": "String"
+			},
+			{
+				"name": "PoorWeather",
+				"type": "String"
+			},
+			{
+				"name": "YR",
+				"type": "String"
+			},
+			{
+				"name": "MO",
+				"type": "String"
+			},
+			{
+				"name": "DA",
+				"type": "String"
+			},
+			{
+				"name": "PRCP",
+				"type": "String"
+			},
+			{
+				"name": "DR",
+				"type": "String"
+			},
+			{
+				"name": "SPD",
+				"type": "String"
+			},
+			{
+				"name": "MAX",
+				"type": "String"
+			},
+			{
+				"name": "MIN",
+				"type": "String"
+			},
+			{
+				"name": "MEA",
+				"type": "String"
+			},
+			{
+				"name": "SNF",
+				"type": "String"
+			},
+			{
+				"name": "SND",
+				"type": "String"
+			},
+			{
+				"name": "FT",
+				"type": "String"
+			},
+			{
+				"name": "FB",
+				"type": "String"
+			},
+			{
+				"name": "FTI",
+				"type": "String"
+			},
+			{
+				"name": "ITH",
+				"type": "String"
+			},
+			{
+				"name": "PGT",
+				"type": "String"
+			},
+			{
+				"name": "TSHDSBRSGF",
+				"type": "String"
+			},
+			{
+				"name": "SD3",
+				"type": "String"
+			},
+			{
+				"name": "RHX",
+				"type": "String"
+			},
+			{
+				"name": "RHN",
+				"type": "String"
+			},
+			{
+				"name": "RVG",
+				"type": "String"
+			},
+			{
+				"name": "WTE",
+				"type": "String"
+			}
+		]
+	}
+}
