@@ -1,0 +1,27 @@
+{
+	"name": "trigger_set_variable",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Started",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "test_pipeline_set_variables",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"param": "hola mundo"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Day",
+				"interval": 1,
+				"startTime": "2023-01-24T17:33:00Z",
+				"timeZone": "UTC"
+			}
+		}
+	}
+}
