@@ -1,8 +1,28 @@
 {
 	"name": "test_pipeline_get_metadata",
 	"properties": {
+		"activities": [
+			{
+				"name": "get metadata",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "param_var",
+					"value": {
+						"value": "@pipeline().parameters.param",
+						"type": "Expression"
+					}
+				}
+			}
+		],
+		"parameters": {
+			"param": {
+				"type": "string"
+			}
+		},
 		"variables": {
-			"var": {
+			"param_var": {
 				"type": "String"
 			}
 		},
