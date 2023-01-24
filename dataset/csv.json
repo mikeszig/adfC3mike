@@ -18,7 +18,8 @@
 				"folderPath": {
 					"value": "@dataset().container",
 					"type": "Expression"
-				}
+				},
+				"container": "input"
 			},
 			"columnDelimiter": ",",
 			"escapeChar": "\\",
