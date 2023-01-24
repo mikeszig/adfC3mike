@@ -88,7 +88,10 @@
 						"referenceName": "csv",
 						"type": "DatasetReference",
 						"parameters": {
-							"container": "input"
+							"container": {
+								"value": "@pipeline().parameters.input_path",
+								"type": "Expression"
+							}
 						}
 					}
 				],
@@ -97,14 +100,20 @@
 						"referenceName": "csv",
 						"type": "DatasetReference",
 						"parameters": {
-							"container": "output"
+							"container": {
+								"value": "@pipeline().parameters.output_path",
+								"type": "Expression"
+							}
 						}
 					}
 				]
 			}
 		],
 		"parameters": {
-			"param": {
+			"input_path": {
+				"type": "string"
+			},
+			"output_path": {
 				"type": "string"
 			}
 		},
