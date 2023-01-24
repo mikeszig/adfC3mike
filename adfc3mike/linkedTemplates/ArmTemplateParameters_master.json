@@ -8,9 +8,6 @@
 		"azure_blob_storage_connectionString": {
 			"value": ""
 		},
-		"trigger_set_variable_properties_test_pipeline_set_variables_parameters_param": {
-			"value": "hola mundo"
-		},
 		"containerUri": {
 			"value": ""
 		},

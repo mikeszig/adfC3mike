@@ -10,10 +10,6 @@
 		"azure_blob_storage_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'azure_blob_storage'"
-		},
-		"trigger_set_variable_properties_test_pipeline_set_variables_parameters_param": {
-			"type": "string",
-			"defaultValue": "hola mundo"
 		}
 	},
 	"variables": {
@@ -74,44 +70,6 @@
 						"type": "String"
 					},
 					"var2": {
-						"type": "String"
-					}
-				},
-				"annotations": []
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/test_pipeline_get_metadata')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "get metadata",
-						"type": "SetVariable",
-						"dependsOn": [],
-						"userProperties": [],
-						"typeProperties": {
-							"variableName": "param_var",
-							"value": {
-								"value": "@pipeline().parameters.param",
-								"type": "Expression"
-							}
-						}
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {},
-					"cancelAfter": {}
-				},
-				"parameters": {
-					"param": {
-						"type": "string"
-					}
-				},
-				"variables": {
-					"param_var": {
 						"type": "String"
 					}
 				},
@@ -218,12 +176,20 @@
 					"referenceName": "azure_blob_storage",
 					"type": "LinkedServiceReference"
 				},
+				"parameters": {
+					"container": {
+						"type": "string"
+					}
+				},
 				"annotations": [],
 				"type": "DelimitedText",
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobStorageLocation",
-						"fileName": "Summary of Weather.csv",
+						"folderPath": {
+							"value": "@dataset().container",
+							"type": "Expression"
+						},
 						"container": "input"
 					},
 					"columnDelimiter": ",",
@@ -363,35 +329,66 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/trigger_set_variable')]",
-			"type": "Microsoft.DataFactory/factories/triggers",
+			"name": "[concat(parameters('factoryName'), '/test_pipeline_get_metadata')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
 			"properties": {
-				"annotations": [],
-				"runtimeState": "Started",
-				"pipelines": [
+				"activities": [
 					{
-						"pipelineReference": {
-							"referenceName": "test_pipeline_set_variables",
-							"type": "PipelineReference"
+						"name": "get_input",
+						"type": "GetMetadata",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
 						},
-						"parameters": {
-							"param": "[parameters('trigger_set_variable_properties_test_pipeline_set_variables_parameters_param')]"
+						"userProperties": [],
+						"typeProperties": {
+							"dataset": {
+								"referenceName": "csv",
+								"type": "DatasetReference",
+								"parameters": {
+									"container": "input"
+								}
+							},
+							"fieldList": [
+								"childItems"
+							],
+							"storeSettings": {
+								"type": "AzureBlobStorageReadSettings",
+								"recursive": true,
+								"enablePartitionDiscovery": false
+							},
+							"formatSettings": {
+								"type": "DelimitedTextReadSettings"
+							}
 						}
 					}
 				],
-				"type": "ScheduleTrigger",
-				"typeProperties": {
-					"recurrence": {
-						"frequency": "Day",
-						"interval": 1,
-						"startTime": "2023-01-24T17:33:00Z",
-						"timeZone": "UTC"
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"input_path": {
+						"type": "string"
+					},
+					"output_path": {
+						"type": "string"
 					}
-				}
+				},
+				"variables": {
+					"param_var": {
+						"type": "String"
+					}
+				},
+				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/pipelines/test_pipeline_set_variables')]"
+				"[concat(variables('factoryId'), '/datasets/csv')]"
 			]
 		}
 	]
