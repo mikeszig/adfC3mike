@@ -1,0 +1,398 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "adfc3mike"
+		},
+		"azure_blob_storage_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'azure_blob_storage'"
+		},
+		"trigger_set_variable_properties_test_pipeline_set_variables_parameters_param": {
+			"type": "string",
+			"defaultValue": "hola mundo"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/test_pipeline')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "set_variable",
+						"type": "SetVariable",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "var",
+							"value": {
+								"value": "@pipeline().parameters.param",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "set_variable2",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "set_variable",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "var2",
+							"value": {
+								"value": "@pipeline().parameters.param",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"param": {
+						"type": "string"
+					}
+				},
+				"variables": {
+					"var": {
+						"type": "String"
+					},
+					"var2": {
+						"type": "String"
+					}
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/test_pipeline_executer')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "execute_pipeline",
+						"type": "ExecutePipeline",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "test_pipeline",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"param": "Hola Mundo"
+							}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"variables": {
+					"var": {
+						"type": "String"
+					}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/test_pipeline')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/test_pipeline_get_metadata')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "get metadata",
+						"type": "SetVariable",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "param_var",
+							"value": {
+								"value": "@pipeline().parameters.param",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"param": {
+						"type": "string"
+					}
+				},
+				"variables": {
+					"param_var": {
+						"type": "String"
+					}
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/test_pipeline_set_variables')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "set_variable",
+						"type": "SetVariable",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "var_param",
+							"value": {
+								"value": "@pipeline().parameters.param",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"param": {
+						"type": "string"
+					}
+				},
+				"variables": {
+					"var_param": {
+						"type": "String"
+					}
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/csv')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "azure_blob_storage",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "Summary of Weather.csv",
+						"container": "input"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "STA",
+						"type": "String"
+					},
+					{
+						"name": "Date",
+						"type": "String"
+					},
+					{
+						"name": "Precip",
+						"type": "String"
+					},
+					{
+						"name": "WindGustSpd",
+						"type": "String"
+					},
+					{
+						"name": "MaxTemp",
+						"type": "String"
+					},
+					{
+						"name": "MinTemp",
+						"type": "String"
+					},
+					{
+						"name": "MeanTemp",
+						"type": "String"
+					},
+					{
+						"name": "Snowfall",
+						"type": "String"
+					},
+					{
+						"name": "PoorWeather",
+						"type": "String"
+					},
+					{
+						"name": "YR",
+						"type": "String"
+					},
+					{
+						"name": "MO",
+						"type": "String"
+					},
+					{
+						"name": "DA",
+						"type": "String"
+					},
+					{
+						"name": "PRCP",
+						"type": "String"
+					},
+					{
+						"name": "DR",
+						"type": "String"
+					},
+					{
+						"name": "SPD",
+						"type": "String"
+					},
+					{
+						"name": "MAX",
+						"type": "String"
+					},
+					{
+						"name": "MIN",
+						"type": "String"
+					},
+					{
+						"name": "MEA",
+						"type": "String"
+					},
+					{
+						"name": "SNF",
+						"type": "String"
+					},
+					{
+						"name": "SND",
+						"type": "String"
+					},
+					{
+						"name": "FT",
+						"type": "String"
+					},
+					{
+						"name": "FB",
+						"type": "String"
+					},
+					{
+						"name": "FTI",
+						"type": "String"
+					},
+					{
+						"name": "ITH",
+						"type": "String"
+					},
+					{
+						"name": "PGT",
+						"type": "String"
+					},
+					{
+						"name": "TSHDSBRSGF",
+						"type": "String"
+					},
+					{
+						"name": "SD3",
+						"type": "String"
+					},
+					{
+						"name": "RHX",
+						"type": "String"
+					},
+					{
+						"name": "RHN",
+						"type": "String"
+					},
+					{
+						"name": "RVG",
+						"type": "String"
+					},
+					{
+						"name": "WTE",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/azure_blob_storage')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/azure_blob_storage')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "get_metadata_csv to csv on azure blob storage",
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"connectionString": "[parameters('azure_blob_storage_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/trigger_set_variable')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "test_pipeline_set_variables",
+							"type": "PipelineReference"
+						},
+						"parameters": {
+							"param": "[parameters('trigger_set_variable_properties_test_pipeline_set_variables_parameters_param')]"
+						}
+					}
+				],
+				"type": "ScheduleTrigger",
+				"typeProperties": {
+					"recurrence": {
+						"frequency": "Day",
+						"interval": 1,
+						"startTime": "2023-01-24T17:33:00Z",
+						"timeZone": "UTC"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/test_pipeline_set_variables')]"
+			]
+		}
+	]
+}

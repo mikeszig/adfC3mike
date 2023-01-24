@@ -1,0 +1,15 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "adfc3mike"
+		},
+		"azure_blob_storage_connectionString": {
+			"value": ""
+		},
+		"trigger_set_variable_properties_test_pipeline_set_variables_parameters_param": {
+			"value": "hola mundo"
+		}
+	}
+}
