@@ -1,0 +1,54 @@
+{
+	"name": "test_pipeline",
+	"properties": {
+		"activities": [
+			{
+				"name": "set_variable",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "var",
+					"value": {
+						"value": "@pipeline().parameters.param",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "set_variable2",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "set_variable",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "var2",
+					"value": {
+						"value": "@pipeline().parameters.param",
+						"type": "Expression"
+					}
+				}
+			}
+		],
+		"parameters": {
+			"param": {
+				"type": "string"
+			}
+		},
+		"variables": {
+			"var": {
+				"type": "String"
+			},
+			"var2": {
+				"type": "String"
+			}
+		},
+		"annotations": []
+	}
+}
