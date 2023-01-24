@@ -3,65 +3,6 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "copy_data",
-				"type": "Copy",
-				"dependsOn": [
-					{
-						"activity": "set_variable",
-						"dependencyConditions": [
-							"Failed"
-						]
-					}
-				],
-				"policy": {
-					"timeout": "0.12:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"enableStaging": false
-				}
-			},
-			{
-				"name": "copy_data2",
-				"type": "Copy",
-				"dependsOn": [
-					{
-						"activity": "copy_data",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
-				"policy": {
-					"timeout": "0.12:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"enableStaging": false
-				}
-			},
-			{
-				"name": "append_variable1",
-				"type": "AppendVariable",
-				"dependsOn": [
-					{
-						"activity": "copy_data",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
-				"userProperties": []
-			},
-			{
 				"name": "set_variable",
 				"type": "SetVariable",
 				"dependsOn": [],
