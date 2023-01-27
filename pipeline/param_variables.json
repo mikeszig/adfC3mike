@@ -1,6 +1,60 @@
 {
 	"name": "param_variables",
 	"properties": {
+		"activities": [
+			{
+				"name": "SetNombre",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "nombre",
+					"value": {
+						"value": "@pipeline().parameters.nombre",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "SetEdad",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "edad",
+					"value": {
+						"value": "@string(pipeline().parameters.edad)",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "SetCuenta",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "cuenta",
+					"value": {
+						"value": "@string(pipeline().parameters.cuenta)",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "SetActivo",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "activo",
+					"value": {
+						"value": "@pipeline().parameters.activo",
+						"type": "Expression"
+					}
+				}
+			}
+		],
 		"parameters": {
 			"nombre": {
 				"type": "string"
