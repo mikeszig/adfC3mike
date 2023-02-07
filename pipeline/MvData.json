@@ -93,22 +93,6 @@
 				}
 			}
 		],
-		"parameters": {
-			"input_path": {
-				"type": "string"
-			},
-			"output_path": {
-				"type": "string"
-			}
-		},
-		"variables": {
-			"input_path": {
-				"type": "String"
-			},
-			"output_path": {
-				"type": "String"
-			}
-		},
 		"annotations": []
 	}
 }
