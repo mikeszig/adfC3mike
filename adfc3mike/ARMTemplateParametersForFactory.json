@@ -7,6 +7,9 @@
 		},
 		"azure_blob_storage_connectionString": {
 			"value": ""
+		},
+		"azure_blob_storage_t2_connectionString": {
+			"value": ""
 		}
 	}
 }

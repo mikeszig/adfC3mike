@@ -11,6 +11,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'azure_blob_storage'"
 		},
+		"azure_blob_storage_t2_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'azure_blob_storage_t2'"
+		},
 		"containerUri": {
 			"type": "string",
 			"metadata": "URI to storage account containing linked ARM templates"
@@ -40,6 +44,9 @@
 					},
 					"azure_blob_storage_connectionString": {
 						"value": "[parameters('azure_blob_storage_connectionString')]"
+					},
+					"azure_blob_storage_t2_connectionString": {
+						"value": "[parameters('azure_blob_storage_t2_connectionString')]"
 					}
 				}
 			},
