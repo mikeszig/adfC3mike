@@ -84,6 +84,13 @@
 						"referenceName": "drugs",
 						"type": "DatasetReference"
 					},
+					"logStorageSettings": {
+						"linkedServiceName": {
+							"referenceName": "azure_blob_storage_t2",
+							"type": "LinkedServiceReference"
+						},
+						"path": "input"
+					},
 					"enableLogging": true,
 					"storeSettings": {
 						"type": "AzureBlobStorageReadSettings",
