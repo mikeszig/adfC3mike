@@ -10,7 +10,7 @@
 				"typeProperties": {
 					"variableName": "a",
 					"value": {
-						"value": "@utcNow()",
+						"value": "@formatDateTime(utcNow(), 'HHmmss')",
 						"type": "Expression"
 					}
 				}
