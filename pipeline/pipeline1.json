@@ -1,0 +1,26 @@
+{
+	"name": "pipeline1",
+	"properties": {
+		"activities": [
+			{
+				"name": "Set variable1",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "a",
+					"value": {
+						"value": "@string(getFutureTime(0, 'Day'))",
+						"type": "Expression"
+					}
+				}
+			}
+		],
+		"variables": {
+			"a": {
+				"type": "String"
+			}
+		},
+		"annotations": []
+	}
+}

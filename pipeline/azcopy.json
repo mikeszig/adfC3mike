@@ -9,7 +9,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"expression": {
-						"value": "@equals(activity('Filter1').output,concat('flag_', utcnow('yyyyMMdd'),'.flg'))",
+						"value": "@and(\n    equals(variables('flag_found'), true),\n    less(int(utcnow()), 2000000000000))",
 						"type": "Expression"
 					},
 					"activities": [
@@ -67,22 +67,6 @@
 							}
 						},
 						{
-							"name": "Wait1",
-							"type": "Wait",
-							"dependsOn": [
-								{
-									"activity": "Set variable1",
-									"dependencyConditions": [
-										"Succeeded"
-									]
-								}
-							],
-							"userProperties": [],
-							"typeProperties": {
-								"waitTimeInSeconds": 60
-							}
-						},
-						{
 							"name": "Set variable1",
 							"type": "SetVariable",
 							"dependsOn": [
@@ -98,6 +82,65 @@
 								"variableName": "flag_found",
 								"value": true
 							}
+						},
+						{
+							"name": "If Condition1",
+							"type": "IfCondition",
+							"dependsOn": [
+								{
+									"activity": "Set variable1",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"userProperties": [],
+							"typeProperties": {
+								"expression": {
+									"value": "@equals(variables('flag_found'), true)",
+									"type": "Expression"
+								},
+								"ifFalseActivities": [
+									{
+										"name": "Wait1",
+										"type": "Wait",
+										"dependsOn": [
+											{
+												"activity": "Set variable2",
+												"dependencyConditions": [
+													"Succeeded"
+												]
+											}
+										],
+										"userProperties": [],
+										"typeProperties": {
+											"waitTimeInSeconds": 60
+										}
+									},
+									{
+										"name": "Set variable2",
+										"type": "SetVariable",
+										"dependsOn": [],
+										"userProperties": [],
+										"typeProperties": {
+											"variableName": "flag_found",
+											"value": false
+										}
+									}
+								],
+								"ifTrueActivities": [
+									{
+										"name": "Set variable3",
+										"type": "SetVariable",
+										"dependsOn": [],
+										"userProperties": [],
+										"typeProperties": {
+											"variableName": "flag_found",
+											"value": true
+										}
+									}
+								]
+							}
 						}
 					],
 					"timeout": "0.12:00:00"
@@ -107,7 +150,7 @@
 		"variables": {
 			"flag_found": {
 				"type": "Boolean",
-				"defaultValue": "False"
+				"defaultValue": false
 			}
 		},
 		"annotations": []
