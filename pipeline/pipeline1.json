@@ -10,7 +10,7 @@
 				"typeProperties": {
 					"variableName": "a",
 					"value": {
-						"value": "@string(getFutureTime(0, 'Day'))",
+						"value": "@utcNow()",
 						"type": "Expression"
 					}
 				}

@@ -9,7 +9,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"expression": {
-						"value": "@and(\n    equals(variables('flag_found'), true),\n    less(int(utcnow()), 2000000000000))",
+						"value": "@and(\n    equals(variables('flag_found'), true),\n    less(int(\n        replace(\n            replace(\n                replace(\n                    utcNow(), '-', ''), ':', ''), 'A-Z', ''\n        )), 2000000000000))\n",
 						"type": "Expression"
 					},
 					"activities": [
