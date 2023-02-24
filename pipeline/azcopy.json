@@ -5,7 +5,14 @@
 			{
 				"name": "Until1",
 				"type": "Until",
-				"dependsOn": [],
+				"dependsOn": [
+					{
+						"activity": "set_countdown",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
 				"userProperties": [],
 				"typeProperties": {
 					"expression": {
@@ -79,8 +86,8 @@
 							],
 							"userProperties": [],
 							"typeProperties": {
-								"variableName": "flag_found",
-								"value": true
+								"variableName": "countdown",
+								"value": "true"
 							}
 						},
 						{
@@ -124,7 +131,7 @@
 										"userProperties": [],
 										"typeProperties": {
 											"variableName": "flag_found",
-											"value": false
+											"value": "false"
 										}
 									}
 								],
@@ -136,7 +143,7 @@
 										"userProperties": [],
 										"typeProperties": {
 											"variableName": "flag_found",
-											"value": true
+											"value": "true"
 										}
 									}
 								]
@@ -145,12 +152,24 @@
 					],
 					"timeout": "0.12:00:00"
 				}
+			},
+			{
+				"name": "set_countdown",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "countdown",
+					"value": {
+						"value": "@addHours(utcNow(), 4)",
+						"type": "Expression"
+					}
+				}
 			}
 		],
 		"variables": {
-			"flag_found": {
-				"type": "Boolean",
-				"defaultValue": false
+			"countdown": {
+				"type": "String"
 			}
 		},
 		"annotations": []
