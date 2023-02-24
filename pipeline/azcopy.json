@@ -16,7 +16,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"expression": {
-						"value": "@and(\n    equals(variables('flag_found'), true),\n    less(int(formatDateTime(utcNow(), 'HHmmss')), 20))",
+						"value": "@and(\n    equals(variables('flag_found'), true),\n    less(\n        int(formatDateTime(utcNow(), 'HHmmss')), \n        int(formatDateTime(variables('countdown'), 'HHmmss'))\n        )\n    )",
 						"type": "Expression"
 					},
 					"activities": [
@@ -68,7 +68,7 @@
 									"type": "Expression"
 								},
 								"condition": {
-									"value": "@equals(item().name,concat('flag_', utcnow('yyyyMMdd'),'.flg'))",
+									"value": "@equals(item().name,concat('flag_', utcNow('yyyyMMdd'),'.flg'))",
 									"type": "Expression"
 								}
 							}
@@ -86,7 +86,7 @@
 							],
 							"userProperties": [],
 							"typeProperties": {
-								"variableName": "countdown",
+								"variableName": "flag_found",
 								"value": "true"
 							}
 						},
@@ -161,7 +161,7 @@
 				"typeProperties": {
 					"variableName": "countdown",
 					"value": {
-						"value": "@addHours(utcNow(), 4)",
+						"value": "@addHours(utcNow(), 5)",
 						"type": "Expression"
 					}
 				}
@@ -169,6 +169,9 @@
 		],
 		"variables": {
 			"countdown": {
+				"type": "String"
+			},
+			"flag_found": {
 				"type": "String"
 			}
 		},
