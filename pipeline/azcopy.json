@@ -7,7 +7,7 @@
 				"type": "Until",
 				"dependsOn": [
 					{
-						"activity": "set_countdown",
+						"activity": "init_timenow",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -16,7 +16,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"expression": {
-						"value": "@and(\n    equals(bool(variables('flag_found')), true),\n    less(\n        int(formatDateTime(utcNow(), 'HHmmss')), \n        int(formatDateTime(variables('countdown'), 'HHmmss'))\n        )\n    )",
+						"value": "@and(\n    equals(bool(variables('flag_found')), true),\n    less(\n        int(formatDateTime(variables('timenow'), 'HHmmss')), \n        int(formatDateTime(variables('countdown'), 'HHmmss'))\n        )\n    )",
 						"type": "Expression"
 					},
 					"activities": [
@@ -74,7 +74,7 @@
 							}
 						},
 						{
-							"name": "Set variable1",
+							"name": "set_flag_found_true",
 							"type": "SetVariable",
 							"dependsOn": [
 								{
@@ -95,7 +95,7 @@
 							"type": "IfCondition",
 							"dependsOn": [
 								{
-									"activity": "Set variable1",
+									"activity": "set_flag_found_true",
 									"dependencyConditions": [
 										"Succeeded"
 									]
@@ -113,7 +113,7 @@
 										"type": "Wait",
 										"dependsOn": [
 											{
-												"activity": "Set variable2",
+												"activity": "set_false",
 												"dependencyConditions": [
 													"Succeeded"
 												]
@@ -125,7 +125,7 @@
 										}
 									},
 									{
-										"name": "Set variable2",
+										"name": "set_false",
 										"type": "SetVariable",
 										"dependsOn": [],
 										"userProperties": [],
@@ -137,7 +137,7 @@
 								],
 								"ifTrueActivities": [
 									{
-										"name": "Set variable3",
+										"name": "set_true",
 										"type": "SetVariable",
 										"dependsOn": [],
 										"userProperties": [],
@@ -147,6 +147,26 @@
 										}
 									}
 								]
+							}
+						},
+						{
+							"name": "set_timenow",
+							"type": "SetVariable",
+							"dependsOn": [
+								{
+									"activity": "If Condition1",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "timenow",
+								"value": {
+									"value": "@formatDateTime(utcNow(), 'HHmmss')",
+									"type": "Expression"
+								}
 							}
 						}
 					],
@@ -165,6 +185,26 @@
 						"type": "Expression"
 					}
 				}
+			},
+			{
+				"name": "init_timenow",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "set_countdown",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "timenow",
+					"value": {
+						"value": "@formatDateTime(utcNow(), 'HHmmss')",
+						"type": "Expression"
+					}
+				}
 			}
 		],
 		"variables": {
@@ -172,6 +212,9 @@
 				"type": "String"
 			},
 			"flag_found": {
+				"type": "String"
+			},
+			"timenow": {
 				"type": "String"
 			}
 		},
