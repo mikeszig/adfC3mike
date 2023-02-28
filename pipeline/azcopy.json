@@ -87,7 +87,7 @@
 							"userProperties": [],
 							"typeProperties": {
 								"variableName": "flag_found",
-								"value": "true"
+								"value": "'true'"
 							}
 						},
 						{
@@ -131,7 +131,7 @@
 										"userProperties": [],
 										"typeProperties": {
 											"variableName": "flag_found",
-											"value": "false"
+											"value": "'false'"
 										}
 									}
 								],
@@ -143,7 +143,7 @@
 										"userProperties": [],
 										"typeProperties": {
 											"variableName": "flag_found",
-											"value": "true"
+											"value": "'true'"
 										}
 									}
 								]
