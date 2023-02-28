@@ -16,7 +16,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"expression": {
-						"value": "@and(\n    equals(variables('flag_found'), true),\n    less(\n        int(formatDateTime(utcNow(), 'HHmmss')), \n        int(formatDateTime(variables('countdown'), 'HHmmss'))\n        )\n    )",
+						"value": "@and(\n    equals(bool(variables('flag_found')), true),\n    less(\n        int(formatDateTime(utcNow(), 'HHmmss')), \n        int(formatDateTime(variables('countdown'), 'HHmmss'))\n        )\n    )",
 						"type": "Expression"
 					},
 					"activities": [
@@ -161,7 +161,7 @@
 				"typeProperties": {
 					"variableName": "countdown",
 					"value": {
-						"value": "@addSeconds(utcNow(), 20)",
+						"value": "@addSeconds(utcNow(), 5)",
 						"type": "Expression"
 					}
 				}
