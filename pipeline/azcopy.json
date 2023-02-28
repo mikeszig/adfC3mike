@@ -181,7 +181,7 @@
 				"typeProperties": {
 					"variableName": "countdown",
 					"value": {
-						"value": "@addSeconds(utcNow(), 5)",
+						"value": "@formatDateTime(addSeconds(utcNow(),5),'HHmmss')",
 						"type": "Expression"
 					}
 				}
