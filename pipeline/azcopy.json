@@ -7,7 +7,7 @@
 				"type": "Until",
 				"dependsOn": [
 					{
-						"activity": "init_timenow",
+						"activity": "set_countdown",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -21,7 +21,7 @@
 					},
 					"activities": [
 						{
-							"name": "Get Metadata1",
+							"name": "get_input_meta",
 							"type": "GetMetadata",
 							"dependsOn": [],
 							"policy": {
@@ -51,11 +51,11 @@
 							}
 						},
 						{
-							"name": "Filter1",
+							"name": "filter_flag",
 							"type": "Filter",
 							"dependsOn": [
 								{
-									"activity": "Get Metadata1",
+									"activity": "get_input_meta",
 									"dependencyConditions": [
 										"Succeeded"
 									]
@@ -78,7 +78,7 @@
 							"type": "SetVariable",
 							"dependsOn": [
 								{
-									"activity": "Filter1",
+									"activity": "filter_flag",
 									"dependencyConditions": [
 										"Succeeded"
 									]
@@ -109,7 +109,7 @@
 								},
 								"ifFalseActivities": [
 									{
-										"name": "Wait1",
+										"name": "wait_60s",
 										"type": "Wait",
 										"dependsOn": [
 											{
@@ -150,7 +150,7 @@
 							}
 						},
 						{
-							"name": "set_timenow",
+							"name": "update_timenow",
 							"type": "SetVariable",
 							"dependsOn": [
 								{
@@ -176,7 +176,14 @@
 			{
 				"name": "set_countdown",
 				"type": "SetVariable",
-				"dependsOn": [],
+				"dependsOn": [
+					{
+						"activity": "init_timenow",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
 				"userProperties": [],
 				"typeProperties": {
 					"variableName": "countdown",
@@ -189,14 +196,7 @@
 			{
 				"name": "init_timenow",
 				"type": "SetVariable",
-				"dependsOn": [
-					{
-						"activity": "set_countdown",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
+				"dependsOn": [],
 				"userProperties": [],
 				"typeProperties": {
 					"variableName": "timenow",
