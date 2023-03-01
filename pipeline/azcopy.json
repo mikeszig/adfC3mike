@@ -87,7 +87,7 @@
 							"userProperties": [],
 							"typeProperties": {
 								"expression": {
-									"value": "@equals(activity('filter_flag').output.value[0].name,concat('flag_', utcNow('yyyyMMdd'),'.flg'))\n\n",
+									"value": "@equals(activity('filter_flag').output.value[0].name,\n    concat('flag_', utcNow('yyyyMMdd'),'.flg'))\n    \n\n",
 									"type": "Expression"
 								},
 								"ifFalseActivities": [
@@ -141,6 +141,12 @@
 									"dependencyConditions": [
 										"Succeeded"
 									]
+								},
+								{
+									"activity": "wait_1m",
+									"dependencyConditions": [
+										"Succeeded"
+									]
 								}
 							],
 							"userProperties": [],
@@ -150,6 +156,22 @@
 									"value": "@formatDateTime(utcNow(), 'HHmmss')",
 									"type": "Expression"
 								}
+							}
+						},
+						{
+							"name": "wait_1m",
+							"type": "Wait",
+							"dependsOn": [
+								{
+									"activity": "If Condition1",
+									"dependencyConditions": [
+										"Failed"
+									]
+								}
+							],
+							"userProperties": [],
+							"typeProperties": {
+								"waitTimeInSeconds": 60
 							}
 						}
 					],
