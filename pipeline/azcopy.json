@@ -87,7 +87,7 @@
 							"userProperties": [],
 							"typeProperties": {
 								"expression": {
-									"value": "@equals(activity('filter_flag').output.value.name,concat('flag_', utcNow('yyyyMMdd'),'.flg'))\n\n",
+									"value": "@equals(activity('filter_flag').output.value[0].name,concat('flag_', utcNow('yyyyMMdd'),'.flg'))\n\n",
 									"type": "Expression"
 								},
 								"ifFalseActivities": [
