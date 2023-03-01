@@ -5,6 +5,9 @@
 		"factoryName": {
 			"value": "adfc3mike"
 		},
+		"MySql1_connectionString": {
+			"value": ""
+		},
 		"azure_blob_storage_connectionString": {
 			"value": ""
 		},
