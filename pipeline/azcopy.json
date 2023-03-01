@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Until1",
+				"name": "until",
 				"type": "Until",
 				"dependsOn": [
 					{
@@ -64,7 +64,7 @@
 							"userProperties": [],
 							"typeProperties": {
 								"items": {
-									"value": "@activity('Get Metadata1').output.childItems",
+									"value": "@activity('get_input_meta').output.childItems",
 									"type": "Expression"
 								},
 								"condition": {
@@ -74,8 +74,8 @@
 							}
 						},
 						{
-							"name": "set_flag_found_true",
-							"type": "SetVariable",
+							"name": "If Condition1",
+							"type": "IfCondition",
 							"dependsOn": [
 								{
 									"activity": "filter_flag",
@@ -86,25 +86,8 @@
 							],
 							"userProperties": [],
 							"typeProperties": {
-								"variableName": "flag_found",
-								"value": "true"
-							}
-						},
-						{
-							"name": "If Condition1",
-							"type": "IfCondition",
-							"dependsOn": [
-								{
-									"activity": "set_flag_found_true",
-									"dependencyConditions": [
-										"Succeeded"
-									]
-								}
-							],
-							"userProperties": [],
-							"typeProperties": {
 								"expression": {
-									"value": "@equals(bool(variables('flag_found')), true)",
+									"value": "@equals(activity('filter_flag').output.value.name,concat('flag_', utcNow('yyyyMMdd'),'.flg'))\n\n",
 									"type": "Expression"
 								},
 								"ifFalseActivities": [
@@ -113,7 +96,7 @@
 										"type": "Wait",
 										"dependsOn": [
 											{
-												"activity": "set_false",
+												"activity": "set_flag_found_false",
 												"dependencyConditions": [
 													"Succeeded"
 												]
@@ -125,7 +108,7 @@
 										}
 									},
 									{
-										"name": "set_false",
+										"name": "set_flag_found_false",
 										"type": "SetVariable",
 										"dependsOn": [],
 										"userProperties": [],
@@ -137,7 +120,7 @@
 								],
 								"ifTrueActivities": [
 									{
-										"name": "set_true",
+										"name": "set_flag_found_true",
 										"type": "SetVariable",
 										"dependsOn": [],
 										"userProperties": [],
@@ -170,7 +153,7 @@
 							}
 						}
 					],
-					"timeout": "0.00:00:30"
+					"timeout": "0.00:00:10"
 				}
 			},
 			{
