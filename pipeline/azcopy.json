@@ -74,7 +74,7 @@
 							}
 						},
 						{
-							"name": "If Condition1",
+							"name": "if_flag_found",
 							"type": "IfCondition",
 							"dependsOn": [
 								{
@@ -137,7 +137,7 @@
 							"type": "SetVariable",
 							"dependsOn": [
 								{
-									"activity": "If Condition1",
+									"activity": "if_flag_found",
 									"dependencyConditions": [
 										"Succeeded"
 									]
@@ -163,7 +163,7 @@
 							"type": "Wait",
 							"dependsOn": [
 								{
-									"activity": "If Condition1",
+									"activity": "if_flag_found",
 									"dependencyConditions": [
 										"Failed"
 									]
