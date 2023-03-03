@@ -486,6 +486,92 @@
 								"parameters": {}
 							}
 						]
+					},
+					{
+						"name": "delete_folder",
+						"type": "Delete",
+						"dependsOn": [
+							{
+								"activity": "cp_input_output",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataset": {
+								"referenceName": "input",
+								"type": "DatasetReference",
+								"parameters": {}
+							},
+							"logStorageSettings": {
+								"linkedServiceName": {
+									"referenceName": "azure_blob_storage",
+									"type": "LinkedServiceReference"
+								}
+							},
+							"enableLogging": true,
+							"storeSettings": {
+								"type": "AzureBlobStorageReadSettings",
+								"recursive": true,
+								"enablePartitionDiscovery": false,
+								"prefix": {
+									"value": "@{utcNow('yyyyMMdd')}",
+									"type": "Expression"
+								}
+							}
+						}
+					},
+					{
+						"name": "delete_flag",
+						"type": "Delete",
+						"dependsOn": [
+							{
+								"activity": "delete_folder",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataset": {
+								"referenceName": "input",
+								"type": "DatasetReference",
+								"parameters": {}
+							},
+							"logStorageSettings": {
+								"linkedServiceName": {
+									"referenceName": "azure_blob_storage",
+									"type": "LinkedServiceReference"
+								}
+							},
+							"enableLogging": true,
+							"storeSettings": {
+								"type": "AzureBlobStorageReadSettings",
+								"recursive": true,
+								"enablePartitionDiscovery": false,
+								"prefix": {
+									"value": "@{concat('flag_', utcNow('yyyyMMdd'),'.flg')}",
+									"type": "Expression"
+								}
+							}
+						}
 					}
 				],
 				"policy": {
@@ -507,7 +593,8 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/input')]",
-				"[concat(variables('factoryId'), '/datasets/output')]"
+				"[concat(variables('factoryId'), '/datasets/output')]",
+				"[concat(variables('factoryId'), '/linkedServices/azure_blob_storage')]"
 			]
 		},
 		{
