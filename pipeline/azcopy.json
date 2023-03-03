@@ -16,7 +16,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"expression": {
-						"value": "@equals(bool(variables('flag_found')), true)",
+						"value": "@and(\n    equals(bool(variables('flag_found')), true),\n    less(int(variables('timenow')),\n        int(variables('countdown')))\n    )",
 						"type": "Expression"
 					},
 					"activities": [
@@ -175,7 +175,7 @@
 							}
 						}
 					],
-					"timeout": "0.01:00:00"
+					"timeout": "0.01:05:00"
 				}
 			},
 			{
@@ -193,7 +193,7 @@
 				"typeProperties": {
 					"variableName": "countdown",
 					"value": {
-						"value": "@formatDateTime(addSeconds(utcNow(),5),'HHmmss')",
+						"value": "@formatDateTime(addHours(utcNow(),1),'HHmmss')",
 						"type": "Expression"
 					}
 				}
