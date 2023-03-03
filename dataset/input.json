@@ -1,5 +1,5 @@
 {
-	"name": "DelimitedText1",
+	"name": "input",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "azure_blob_storage",
