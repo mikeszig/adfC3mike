@@ -10,10 +10,6 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"folderPath": {
-					"value": "@utcNow('yyyyMMdd')",
-					"type": "Expression"
-				},
 				"container": "input"
 			},
 			"columnDelimiter": ",",
