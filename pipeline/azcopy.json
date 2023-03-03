@@ -241,7 +241,6 @@
 								"value": "@utcNow('yyyyMMdd')",
 								"type": "Expression"
 							},
-							"wildcardFileName": "*",
 							"enablePartitionDiscovery": false
 						},
 						"formatSettings": {
