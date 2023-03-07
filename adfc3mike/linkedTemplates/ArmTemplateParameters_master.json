@@ -17,6 +17,9 @@
 		"MySql2_connectionString": {
 			"value": ""
 		},
+		"trigger_mvdata_properties_entrypoint_pipeline_parameters_param_call_sql": {
+			"value": false
+		},
 		"containerUri": {
 			"value": ""
 		},

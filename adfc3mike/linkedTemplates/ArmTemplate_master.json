@@ -23,6 +23,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'MySql2'"
 		},
+		"trigger_mvdata_properties_entrypoint_pipeline_parameters_param_call_sql": {
+			"type": "bool",
+			"defaultValue": false
+		},
 		"containerUri": {
 			"type": "string",
 			"metadata": "URI to storage account containing linked ARM templates"
@@ -79,6 +83,9 @@
 				"parameters": {
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
+					},
+					"trigger_mvdata_properties_entrypoint_pipeline_parameters_param_call_sql": {
+						"value": "[parameters('trigger_mvdata_properties_entrypoint_pipeline_parameters_param_call_sql')]"
 					}
 				}
 			},

@@ -6,6 +6,10 @@
 			"type": "string",
 			"metadata": "Data Factory name",
 			"defaultValue": "adfc3mike"
+		},
+		"trigger_mvdata_properties_entrypoint_pipeline_parameters_param_call_sql": {
+			"type": "bool",
+			"defaultValue": false
 		}
 	},
 	"variables": {
@@ -49,10 +53,35 @@
 							"enableStaging": false,
 							"translator": {
 								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "day",
+											"type": "DateTime"
+										},
+										"sink": {
+											"name": "day",
+											"type": "String",
+											"physicalType": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "value",
+											"type": "String"
+										},
+										"sink": {
+											"name": "value",
+											"type": "String",
+											"physicalType": "String"
+										}
+									}
+								],
 								"typeConversion": true,
 								"typeConversionSettings": {
-									"allowDataTruncation": true,
-									"treatBooleanAsNumber": false
+									"allowDataTruncation": false,
+									"treatBooleanAsNumber": false,
+									"dateTimeFormat": "yyyy-MM-dd"
 								}
 							}
 						},
@@ -626,6 +655,40 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/pipelines/sql_pipeline')]",
 				"[concat(variables('factoryId'), '/pipelines/azcopy_pipeline')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/trigger_mvdata')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Stopped",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "entrypoint_pipeline",
+							"type": "PipelineReference"
+						},
+						"parameters": {
+							"param_call_sql": "[parameters('trigger_mvdata_properties_entrypoint_pipeline_parameters_param_call_sql')]"
+						}
+					}
+				],
+				"type": "ScheduleTrigger",
+				"typeProperties": {
+					"recurrence": {
+						"frequency": "Day",
+						"interval": 1,
+						"startTime": "2023-03-07T03:30:00Z",
+						"endTime": "2023-06-27T08:30:00Z",
+						"timeZone": "UTC",
+						"schedule": {}
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/entrypoint_pipeline')]"
 			]
 		}
 	]
