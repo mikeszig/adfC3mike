@@ -16,7 +16,8 @@
 				"userProperties": [],
 				"typeProperties": {
 					"source": {
-						"type": "MySqlSource"
+						"type": "MySqlSource",
+						"query": "SELECT * FROM daily WHERE day = CURDATE();"
 					},
 					"sink": {
 						"type": "DelimitedTextSink",
