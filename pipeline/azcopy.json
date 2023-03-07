@@ -366,12 +366,6 @@
 				}
 			}
 		],
-		"parameters": {
-			"param_call_sql": {
-				"type": "bool",
-				"defaultValue": false
-			}
-		},
 		"variables": {
 			"countdown": {
 				"type": "String"
@@ -381,9 +375,6 @@
 			},
 			"timenow": {
 				"type": "String"
-			},
-			"call_sql": {
-				"type": "Boolean"
 			}
 		},
 		"annotations": []
