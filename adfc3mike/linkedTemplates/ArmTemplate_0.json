@@ -18,68 +18,16 @@
 		"azure_blob_storage_t2_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'azure_blob_storage_t2'"
+		},
+		"MySql2_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'MySql2'"
 		}
 	},
 	"variables": {
 		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
 	},
 	"resources": [
-		{
-			"name": "[concat(parameters('factoryName'), '/SQL')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "If Condition1",
-						"type": "IfCondition",
-						"dependsOn": [],
-						"userProperties": [],
-						"typeProperties": {
-							"expression": {
-								"value": "@less(\n        int(formatDateTime(utcNow(), 'HHmmss')), \n        int(formatDateTime(addSeconds(utcNow(),5),'HHmmss'))\n        )",
-								"type": "Expression"
-							},
-							"ifFalseActivities": [
-								{
-									"name": "Set variable2",
-									"type": "SetVariable",
-									"dependsOn": [],
-									"userProperties": [],
-									"typeProperties": {
-										"variableName": "v",
-										"value": "false"
-									}
-								}
-							],
-							"ifTrueActivities": [
-								{
-									"name": "Set variable1",
-									"type": "SetVariable",
-									"dependsOn": [],
-									"userProperties": [],
-									"typeProperties": {
-										"variableName": "v",
-										"value": "true"
-									}
-								}
-							]
-						}
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {},
-					"cancelAfter": {}
-				},
-				"variables": {
-					"v": {
-						"type": "String"
-					}
-				},
-				"annotations": []
-			},
-			"dependsOn": []
-		},
 		{
 			"name": "[concat(parameters('factoryName'), '/param_variables')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
@@ -445,6 +393,19 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/MySql2')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "MySql",
+				"typeProperties": {
+					"connectionString": "[parameters('MySql2_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/test_pipeline_executer')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -480,32 +441,6 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/pipelines/test_pipeline')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/input')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "azure_blob_storage",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "DelimitedText",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobStorageLocation",
-						"container": "input"
-					},
-					"columnDelimiter": ",",
-					"escapeChar": "\\",
-					"quoteChar": "\""
-				},
-				"schema": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/azure_blob_storage')]"
 			]
 		},
 		{
@@ -815,6 +750,32 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/input')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "azure_blob_storage",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"container": "input"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/azure_blob_storage')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/output')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -835,6 +796,70 @@
 					"quoteChar": "\""
 				},
 				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/azure_blob_storage')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/MySqlTable2')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "MySql2",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "MySqlTable",
+				"schema": [],
+				"typeProperties": {
+					"tableName": "`daily`"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/MySql2')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/output_csv')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "azure_blob_storage",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": {
+							"value": "@{utcNow('yyyyMMdd')}",
+							"type": "Expression"
+						},
+						"folderPath": {
+							"value": "@{utcNow('yyyyMMdd')}",
+							"type": "Expression"
+						},
+						"container": "output"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "2023-03-07 00:00:00.0000000",
+						"type": "String"
+					},
+					{
+						"name": "valor1",
+						"type": "String"
+					}
+				]
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/azure_blob_storage')]"
@@ -957,467 +982,6 @@
 				"[concat(variables('factoryId'), '/datasets/drugs')]",
 				"[concat(variables('factoryId'), '/datasets/drugs_dest')]",
 				"[concat(variables('factoryId'), '/linkedServices/azure_blob_storage_t2')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/azcopy')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "until",
-						"type": "Until",
-						"dependsOn": [
-							{
-								"activity": "set_countdown",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"expression": {
-								"value": "@and(\n    equals(bool(variables('flag_found')), true),\n    less(int(variables('timenow')),\n        int(variables('countdown')))\n    )",
-								"type": "Expression"
-							},
-							"activities": [
-								{
-									"name": "get_input_meta",
-									"type": "GetMetadata",
-									"dependsOn": [],
-									"policy": {
-										"timeout": "0.12:00:00",
-										"retry": 0,
-										"retryIntervalInSeconds": 30,
-										"secureOutput": false,
-										"secureInput": false
-									},
-									"userProperties": [],
-									"typeProperties": {
-										"dataset": {
-											"referenceName": "input",
-											"type": "DatasetReference",
-											"parameters": {}
-										},
-										"fieldList": [
-											"childItems"
-										],
-										"storeSettings": {
-											"type": "AzureBlobStorageReadSettings",
-											"recursive": true,
-											"enablePartitionDiscovery": false
-										},
-										"formatSettings": {
-											"type": "DelimitedTextReadSettings"
-										}
-									}
-								},
-								{
-									"name": "filter_flag",
-									"type": "Filter",
-									"dependsOn": [
-										{
-											"activity": "get_input_meta",
-											"dependencyConditions": [
-												"Succeeded"
-											]
-										}
-									],
-									"userProperties": [],
-									"typeProperties": {
-										"items": {
-											"value": "@activity('get_input_meta').output.childItems",
-											"type": "Expression"
-										},
-										"condition": {
-											"value": "@equals(item().name,concat('flag_', utcNow('yyyyMMdd'),'.flg'))",
-											"type": "Expression"
-										}
-									}
-								},
-								{
-									"name": "if_flag_found",
-									"type": "IfCondition",
-									"dependsOn": [
-										{
-											"activity": "filter_flag",
-											"dependencyConditions": [
-												"Succeeded"
-											]
-										}
-									],
-									"userProperties": [],
-									"typeProperties": {
-										"expression": {
-											"value": "@and(\n    not(\n        equals(activity('filter_flag').output.FilteredItemsCount, 0)\n        ),\n    equals(activity('filter_flag').output.value[0].name,\n    concat('flag_', utcNow('yyyyMMdd'),'.flg'))\n    )\n    \n\n",
-											"type": "Expression"
-										},
-										"ifFalseActivities": [
-											{
-												"name": "wait_60s",
-												"type": "Wait",
-												"dependsOn": [
-													{
-														"activity": "set_flag_found_false",
-														"dependencyConditions": [
-															"Succeeded"
-														]
-													}
-												],
-												"userProperties": [],
-												"typeProperties": {
-													"waitTimeInSeconds": 60
-												}
-											},
-											{
-												"name": "set_flag_found_false",
-												"type": "SetVariable",
-												"dependsOn": [],
-												"userProperties": [],
-												"typeProperties": {
-													"variableName": "flag_found",
-													"value": "false"
-												}
-											}
-										],
-										"ifTrueActivities": [
-											{
-												"name": "set_flag_found_true",
-												"type": "SetVariable",
-												"dependsOn": [],
-												"userProperties": [],
-												"typeProperties": {
-													"variableName": "flag_found",
-													"value": "true"
-												}
-											}
-										]
-									}
-								},
-								{
-									"name": "update_timenow",
-									"type": "SetVariable",
-									"dependsOn": [
-										{
-											"activity": "if_flag_found",
-											"dependencyConditions": [
-												"Succeeded"
-											]
-										},
-										{
-											"activity": "wait_1m",
-											"dependencyConditions": [
-												"Succeeded"
-											]
-										}
-									],
-									"userProperties": [],
-									"typeProperties": {
-										"variableName": "timenow",
-										"value": {
-											"value": "@formatDateTime(utcNow(), 'HHmmss')",
-											"type": "Expression"
-										}
-									}
-								},
-								{
-									"name": "wait_1m",
-									"type": "Wait",
-									"dependsOn": [
-										{
-											"activity": "if_flag_found",
-											"dependencyConditions": [
-												"Failed"
-											]
-										}
-									],
-									"userProperties": [],
-									"typeProperties": {
-										"waitTimeInSeconds": 60
-									}
-								}
-							],
-							"timeout": "0.01:05:00"
-						}
-					},
-					{
-						"name": "set_countdown",
-						"type": "SetVariable",
-						"dependsOn": [
-							{
-								"activity": "init_timenow",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"variableName": "countdown",
-							"value": {
-								"value": "@formatDateTime(addHours(utcNow(),1),'HHmmss')",
-								"type": "Expression"
-							}
-						}
-					},
-					{
-						"name": "init_timenow",
-						"type": "SetVariable",
-						"dependsOn": [],
-						"userProperties": [],
-						"typeProperties": {
-							"variableName": "timenow",
-							"value": {
-								"value": "@formatDateTime(utcNow(), 'HHmmss')",
-								"type": "Expression"
-							}
-						}
-					},
-					{
-						"name": "cp_input_output",
-						"type": "Copy",
-						"dependsOn": [
-							{
-								"activity": "until",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "DelimitedTextSource",
-								"storeSettings": {
-									"type": "AzureBlobStorageReadSettings",
-									"recursive": true,
-									"modifiedDatetimeStart": "2023-03-03T00:00:00.000Z",
-									"enablePartitionDiscovery": false,
-									"prefix": {
-										"value": "@{utcNow('yyyyMMdd')}",
-										"type": "Expression"
-									}
-								},
-								"formatSettings": {
-									"type": "DelimitedTextReadSettings"
-								}
-							},
-							"sink": {
-								"type": "DelimitedTextSink",
-								"storeSettings": {
-									"type": "AzureBlobStorageWriteSettings"
-								},
-								"formatSettings": {
-									"type": "DelimitedTextWriteSettings",
-									"quoteAllText": true,
-									"fileExtension": ".csv"
-								}
-							},
-							"enableStaging": false,
-							"translator": {
-								"type": "TabularTranslator",
-								"typeConversion": true,
-								"typeConversionSettings": {
-									"allowDataTruncation": true,
-									"treatBooleanAsNumber": false
-								}
-							}
-						},
-						"inputs": [
-							{
-								"referenceName": "input",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						],
-						"outputs": [
-							{
-								"referenceName": "output",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						]
-					},
-					{
-						"name": "delete_folder",
-						"type": "Delete",
-						"dependsOn": [
-							{
-								"activity": "cp_input_output",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"dataset": {
-								"referenceName": "input",
-								"type": "DatasetReference",
-								"parameters": {}
-							},
-							"logStorageSettings": {
-								"linkedServiceName": {
-									"referenceName": "azure_blob_storage",
-									"type": "LinkedServiceReference"
-								}
-							},
-							"enableLogging": true,
-							"storeSettings": {
-								"type": "AzureBlobStorageReadSettings",
-								"recursive": true,
-								"enablePartitionDiscovery": false,
-								"prefix": {
-									"value": "@{utcNow('yyyyMMdd')}",
-									"type": "Expression"
-								}
-							}
-						}
-					},
-					{
-						"name": "delete_flag",
-						"type": "Delete",
-						"dependsOn": [
-							{
-								"activity": "delete_folder",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"dataset": {
-								"referenceName": "input",
-								"type": "DatasetReference",
-								"parameters": {}
-							},
-							"logStorageSettings": {
-								"linkedServiceName": {
-									"referenceName": "azure_blob_storage",
-									"type": "LinkedServiceReference"
-								}
-							},
-							"enableLogging": true,
-							"storeSettings": {
-								"type": "AzureBlobStorageReadSettings",
-								"recursive": true,
-								"enablePartitionDiscovery": false,
-								"prefix": {
-									"value": "@{concat('flag_', utcNow('yyyyMMdd'),'.flg')}",
-									"type": "Expression"
-								}
-							}
-						}
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {},
-					"cancelAfter": {}
-				},
-				"variables": {
-					"countdown": {
-						"type": "String"
-					},
-					"flag_found": {
-						"type": "String"
-					},
-					"timenow": {
-						"type": "String"
-					}
-				},
-				"annotations": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/input')]",
-				"[concat(variables('factoryId'), '/datasets/output')]",
-				"[concat(variables('factoryId'), '/linkedServices/azure_blob_storage')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/test_pipeline_get_metadata')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "get_input",
-						"type": "GetMetadata",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"dataset": {
-								"referenceName": "csv",
-								"type": "DatasetReference",
-								"parameters": {
-									"container": "input"
-								}
-							},
-							"fieldList": [
-								"childItems"
-							],
-							"storeSettings": {
-								"type": "AzureBlobStorageReadSettings",
-								"recursive": true,
-								"enablePartitionDiscovery": false
-							},
-							"formatSettings": {
-								"type": "DelimitedTextReadSettings"
-							}
-						}
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {},
-					"cancelAfter": {}
-				},
-				"parameters": {
-					"input_path": {
-						"type": "string"
-					},
-					"output_path": {
-						"type": "string"
-					}
-				},
-				"variables": {
-					"param_var": {
-						"type": "String"
-					}
-				},
-				"annotations": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/csv')]"
 			]
 		}
 	]

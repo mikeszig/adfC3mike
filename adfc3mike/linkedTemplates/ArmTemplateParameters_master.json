@@ -14,6 +14,9 @@
 		"azure_blob_storage_t2_connectionString": {
 			"value": ""
 		},
+		"MySql2_connectionString": {
+			"value": ""
+		},
 		"containerUri": {
 			"value": ""
 		},
