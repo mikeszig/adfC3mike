@@ -47,7 +47,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "output",
+						"referenceName": "output_csv",
 						"type": "DatasetReference"
 					}
 				]

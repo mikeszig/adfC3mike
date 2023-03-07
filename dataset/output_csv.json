@@ -1,0 +1,39 @@
+{
+	"name": "output_csv",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "azure_blob_storage",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": {
+					"value": "@{utcNow('yyyyMMdd')}",
+					"type": "Expression"
+				},
+				"folderPath": {
+					"value": "@{utcNow('yyyyMMdd')}",
+					"type": "Expression"
+				},
+				"container": "output"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "2023-03-07 00:00:00.0000000",
+				"type": "String"
+			},
+			{
+				"name": "valor1",
+				"type": "String"
+			}
+		]
+	}
+}
