@@ -1,5 +1,5 @@
 {
-	"name": "azcopy",
+	"name": "azcopy_pipeline",
 	"properties": {
 		"activities": [
 			{
