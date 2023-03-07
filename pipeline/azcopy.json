@@ -375,6 +375,10 @@
 			},
 			"timenow": {
 				"type": "String"
+			},
+			"call_sql": {
+				"type": "Boolean",
+				"defaultValue": false
 			}
 		},
 		"annotations": []
