@@ -33,10 +33,35 @@
 					"enableStaging": false,
 					"translator": {
 						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "day",
+									"type": "DateTime"
+								},
+								"sink": {
+									"name": "day",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "value",
+									"type": "String"
+								},
+								"sink": {
+									"name": "value",
+									"type": "String",
+									"physicalType": "String"
+								}
+							}
+						],
 						"typeConversion": true,
 						"typeConversionSettings": {
-							"allowDataTruncation": true,
-							"treatBooleanAsNumber": false
+							"allowDataTruncation": false,
+							"treatBooleanAsNumber": false,
+							"dateTimeFormat": "yyyy-MM-dd"
 						}
 					}
 				},
