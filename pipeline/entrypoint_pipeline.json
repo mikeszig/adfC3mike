@@ -1,6 +1,81 @@
 {
-	"name": "pipeline3",
+	"name": "entrypoint_pipeline",
 	"properties": {
+		"activities": [
+			{
+				"name": "set_call_sql",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "call_sql",
+					"value": {
+						"value": "@pipeline().parameters.param_call_sql",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "check_call_sql_var",
+				"type": "IfCondition",
+				"dependsOn": [
+					{
+						"activity": "set_call_sql",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"expression": {
+						"value": "@equals(variables('call_sql'), bool(true))",
+						"type": "Expression"
+					},
+					"ifFalseActivities": [
+						{
+							"name": "execute_server",
+							"type": "ExecutePipeline",
+							"dependsOn": [],
+							"userProperties": [],
+							"typeProperties": {
+								"pipeline": {
+									"referenceName": "azcopy_pipeline",
+									"type": "PipelineReference"
+								},
+								"waitOnCompletion": true
+							}
+						}
+					],
+					"ifTrueActivities": [
+						{
+							"name": "execute_sql",
+							"type": "ExecutePipeline",
+							"dependsOn": [],
+							"userProperties": [],
+							"typeProperties": {
+								"pipeline": {
+									"referenceName": "sql_pipeline",
+									"type": "PipelineReference"
+								},
+								"waitOnCompletion": true
+							}
+						}
+					]
+				}
+			}
+		],
+		"parameters": {
+			"param_call_sql": {
+				"type": "bool",
+				"defaultValue": false
+			}
+		},
+		"variables": {
+			"call_sql": {
+				"type": "Boolean"
+			}
+		},
 		"annotations": []
 	}
 }
