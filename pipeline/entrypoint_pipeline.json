@@ -3,27 +3,23 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "check_call_sql_var",
+				"name": "check_sql_param",
 				"type": "IfCondition",
 				"dependsOn": [],
 				"userProperties": [],
 				"typeProperties": {
 					"expression": {
-						"value": "@equals(variables('call_sql'), bool(true))",
+						"value": "@equals(pipeline().parameters.param_call_sql, bool(true))",
 						"type": "Expression"
 					},
 					"ifFalseActivities": [
 						{
-							"name": "execute_server",
-							"type": "ExecutePipeline",
+							"name": "Wait2",
+							"type": "Wait",
 							"dependsOn": [],
 							"userProperties": [],
 							"typeProperties": {
-								"pipeline": {
-									"referenceName": "azcopy_pipeline",
-									"type": "PipelineReference"
-								},
-								"waitOnCompletion": true
+								"waitTimeInSeconds": 3
 							}
 						}
 					],
@@ -45,13 +41,13 @@
 				}
 			},
 			{
-				"name": "check_call_sql_var_copy1",
+				"name": "check_server_param",
 				"type": "IfCondition",
 				"dependsOn": [],
 				"userProperties": [],
 				"typeProperties": {
 					"expression": {
-						"value": "@equals(variables('call_sql'), bool(true))",
+						"value": "@equals(pipeline().parameters.param_call_server, bool(true))\n",
 						"type": "Expression"
 					},
 					"ifFalseActivities": [
@@ -67,13 +63,13 @@
 					],
 					"ifTrueActivities": [
 						{
-							"name": "execute_sql_copy1",
+							"name": "execute_server",
 							"type": "ExecutePipeline",
 							"dependsOn": [],
 							"userProperties": [],
 							"typeProperties": {
 								"pipeline": {
-									"referenceName": "sql_pipeline",
+									"referenceName": "azcopy_pipeline",
 									"type": "PipelineReference"
 								},
 								"waitOnCompletion": true
